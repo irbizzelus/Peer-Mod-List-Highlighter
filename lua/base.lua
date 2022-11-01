@@ -111,11 +111,12 @@ PeerModListHighlights:loadlistcolours()
 -- Some info from the message above (with porting) can be useful to you, but whatever.
 -- If you want to add mods manualy, you need to add them IN CAPS into the lists below.
 -- Dont forget "" symbols to put your mod name within and to put a comma after a mod's name like in example above or list below
--- However, this way you only add 'default' mods that are written into the save file if you dont have one yet - on the first boot up of the game with this mod installed.
+-- However, this way you only add 'default' mods that are written into the save file if you dont have a save file yet, on the first boot up of the game with this mod installed.
 -- You can remove the save file (location: mods/saves/PMLH_save.txt) and start the game to reset them to these defaults.
 --
 -- If you want to add mods after the save file was created, you need to go the save file mentioned above, and change values there.
 -- Over there logic is pretty much the same, only caps, commas after every name. It is a bit harder to read because it's in one line though, but i believe you will manage that :)
+-- If your game crashes on start up after you tinkered with save files, you probably made a typo
 
 
 PeerModListHighlights.lists ={

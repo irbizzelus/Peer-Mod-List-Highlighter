@@ -1,5 +1,5 @@
 {
-	"PMLH_title": "Peer Mod List Hihglighter",
+	"PMLH_title": "Peer Mod List Highlighter",
 	"PMLH_desc": "Изменить настройки мода PMLH",
 	"PMLH_blank": "",
 	
