@@ -1,0 +1,28 @@
+{
+	"PMLH_title": "Peer Mod List Hihglighter",
+	"PMLH_desc": "Изменить настройки мода PMLH",
+	"PMLH_blank": "",
+	
+	"PMLHjoinmods": "Лист модов на экране загрузки",
+	"PMLHjoinmods_desc": "Пока в ваше лобби загружается новый игрок, показать список его модов с соответствующей подсвтекой.",
+	
+	"colourchoice": "Итоговый цвет",
+	"green_header": "Первый лист",
+	"yellow_header": "Второй лист",
+	"red_header": "Третий лист",
+	"colour1": "Количество красного",
+	"colour2": "Количество зеленого",
+	"colour3": "Количество синего",
+	
+	"joinplayer_list_mods": "Моды игрока:",
+	"PMLH_searchmodname": "Попытаться найти мод по имени на modworkshop",
+	"PMLH_searchmodfolder": "Попытаться найти мод по названию его папки на modworkshop",
+	"PMLH_adjustmod": "Добавить или удалить мод из ",
+	"PMLH_list1name": "первого",
+	"PMLH_list2name": "второго",
+	"PMLH_list3name": "третьего",
+	"PMLH_list": " списка",
+	"PMLH_adjustmenutitle": "Peer Mod List Highlighter",
+	"PMLH_adjustmenuquestion": "Что вы хотите сделать?",
+	"PMLH_cancelbutton": "Отменить"
+}

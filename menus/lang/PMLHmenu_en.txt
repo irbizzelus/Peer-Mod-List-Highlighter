@@ -1,0 +1,28 @@
+{
+	"PMLH_title": "Peer Mod List Hihglighter",
+	"PMLH_desc": "Change PMLH's settings.",
+	"PMLH_blank": "",
+	
+	"PMLHjoinmods": "Join screen mod list",
+	"PMLHjoinmods_desc": "While a new player is loading into your lobby show their mod list with appropriate highlights.",
+	
+	"colourchoice": "Result colour",
+	"green_header": "First list",
+	"yellow_header": "Second list",
+	"red_header": "Third list",
+	"colour1": "Amount of red",
+	"colour2": "Amount of green",
+	"colour3": "Amount of blue",
+	
+	"joinplayer_list_mods": "Player's mods:",
+	"PMLH_searchmodname": "Try to find mod on modworkshop by name",
+	"PMLH_searchmodfolder": "Try to find mod on modworkshop by mod's folder name",
+	"PMLH_adjustmod": "Add or remove mod from ",
+	"PMLH_list1name": "First",
+	"PMLH_list2name": "Second",
+	"PMLH_list3name": "Third",
+	"PMLH_list": " list",
+	"PMLH_adjustmenutitle": "Peer Mod List Highlighter",
+	"PMLH_adjustmenuquestion": "What do you want to do?",
+	"PMLH_cancelbutton": "Cancel"
+}
