@@ -109,11 +109,11 @@ end)
 
 
 Hooks:PostHook(MenuManager,"close_person_joining","PMLHjoinmodlistOff",function(id) -- remove our panel when load is complete
-	local hud =	managers.hud:script(PlayerBase.PLAYER_INFO_HUD_FULLSCREEN_PD2)
-	local panel = hud.panel:child("user_dropin" .. tostring(id))
 	if not managers.hud or not managers.hud:script(PlayerBase.PLAYER_INFO_HUD_FULLSCREEN_PD2) then
 		return
 	end
+	local hud =	managers.hud:script(PlayerBase.PLAYER_INFO_HUD_FULLSCREEN_PD2)
+	local panel = hud.panel:child("user_dropin" .. tostring(id))
 	if panel then
 		managers.hud:script(PlayerBase.PLAYER_INFO_HUD_FULLSCREEN_PD2).panel:remove(panel)
 		PeerModListHighlights._joining_mods = nil
