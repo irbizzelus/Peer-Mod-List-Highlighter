@@ -12,7 +12,7 @@ Hooks:PostHook(MenuManager,"show_person_joining","PMLHjoinmodlistOn",function(id
 	local hud = managers.hud:script(PlayerBase.PLAYER_INFO_HUD_FULLSCREEN_PD2)
 	local panel = hud.panel:panel({name = "user_dropin" .. tostring(id), layer = 10000})
 	if PeerModListHighlights.settings.join_mods == true and peer and peer:synced_mods() and #peer:synced_mods() > 0 then -- if peer has mods create a panel
-	local mods_fade = panel:gradient({
+		local mods_fade = panel:gradient({
 			name = "mods_fade1",
 			layer = 1,
 			gradient_points = {0,Color.black:with_alpha(0),0.85,Color.black:with_alpha(0.5),1,Color.black:with_alpha(0.7)}

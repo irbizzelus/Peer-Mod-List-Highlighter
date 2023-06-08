@@ -29,16 +29,18 @@ function InspectPlayerInitiator:modify_node(node, inspect_peer)
 
 	node:add_item(new_item)
 
-	local params = {
-		callback = "on_visit_fbi_files_suspect",
-		help_id = "menu_visit_fbi_files_help",
-		text_id = "menu_visit_fbi_files",
-		name = inspect_peer:user_id()
-	}
-	local new_item = node:create_item(nil, params)
+	if MenuCallbackHandler:is_steam() and inspect_peer:account_type() == Idstring("STEAM") then
+		local params = {
+			callback = "on_visit_fbi_files_suspect",
+			help_id = "menu_visit_fbi_files_help",
+			text_id = "menu_visit_fbi_files",
+			name = inspect_peer:account_id()
+		}
+		local new_item = node:create_item(nil, params)
 
-	node:add_item(new_item)
-	self:create_divider(node, "fbi_spacer")
+		node:add_item(new_item)
+		self:create_divider(node, "fbi_spacer")
+	end
 
 	if not is_local_peer and Network:is_server() then
 		if MenuCallbackHandler:kick_player_visible() or MenuCallbackHandler:kick_vote_visible() then
@@ -55,7 +57,7 @@ function InspectPlayerInitiator:modify_node(node, inspect_peer)
 		end
 
 		local function get_identifier(peer)
-			return SystemInfo:platform() == Idstring("WIN32") and peer:user_id() or peer:name()
+			return SystemInfo:platform() == Idstring("WIN32") and peer:account_id() or peer:name()
 		end
 
 		local params = {
@@ -84,10 +86,47 @@ function InspectPlayerInitiator:modify_node(node, inspect_peer)
 
 		toggle_mute:set_value(inspect_peer:is_muted() and "on" or "off")
 	end
+	
+	self:create_divider(node, "socialhub_spacer")
+
+	if not is_local_peer and not managers.socialhub:is_user_friend(inspect_peer._user_id) then
+		local add_user = {
+			callback = "on_add_user_socialhub",
+			name = "shub_add_user",
+			text_id = "menu_players_socialhub_add_user",
+			help_id = "menu_players_socialhub_add_user_help",
+			user_id = inspect_peer._user_id
+		}
+		local new_item = node:create_item(nil, add_user)
+
+		node:add_item(new_item)
+
+		local block_user = {
+			callback = "on_block_user_socialhub",
+			name = "shub_block_user",
+			text_id = "menu_players_socialhub_block_user",
+			help_id = "menu_players_socialhub_block_user_help",
+			user_id = inspect_peer._user_id
+		}
+		local new_item = node:create_item(nil, block_user)
+
+		node:add_item(new_item)
+	elseif not is_local_peer and managers.socialhub:is_user_friend(inspect_peer._user_id) then
+		local remove_user = {
+			callback = "on_remove_user_socialhub",
+			name = "shub_remove_user",
+			text_id = "menu_players_socialhub_remove_user",
+			help_id = "menu_players_socialhub_remove_friend_help",
+			user_id = inspect_peer._user_id
+		}
+		local new_item = node:create_item(nil, remove_user)
+
+		node:add_item(new_item)
+	end
 
 	self:create_divider(node, "admin_spacer")
 
-	local user = Steam:user(inspect_peer:ip())
+	local user = SystemInfo:distribution() == Idstring("STEAM") and Steam:user(inspect_peer:ip())
 
 	if user and user:rich_presence("is_modded") == "1" or inspect_peer:is_modded() then
 		local params = {
@@ -208,17 +247,17 @@ end
 
 function PeerModListHighlights:checkmod()
 	if modworkshopmodName ~= nil then
-		Steam:overlay_activate("url", "https://modworkshop.net/find/mod?q=" .. modworkshopmodName .. "&tags=&gid=1")
+		managers.network.account:overlay_activate("url", "https://modworkshop.net/find/mod?q=" .. modworkshopmodName .. "&tags=&gid=1")
 	else
-		Steam:overlay_activate("url", "https://modworkshop.net")
+		managers.network.account:overlay_activate("url", "https://modworkshop.net")
 	end
 end
 
 function PeerModListHighlights:checkmodbyid()
 	if modworkshopmodID ~= nil then
-		Steam:overlay_activate("url", "https://modworkshop.net/find/mod?q=" .. modworkshopmodID .. "&tags=&gid=1")
+		managers.network.account:overlay_activate("url", "https://modworkshop.net/find/mod?q=" .. modworkshopmodID .. "&tags=&gid=1")
 	else
-		Steam:overlay_activate("url", "https://modworkshop.net")
+		managers.network.account:overlay_activate("url", "https://modworkshop.net")
 	end
 end
 

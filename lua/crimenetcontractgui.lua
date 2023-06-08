@@ -1275,17 +1275,17 @@ end
 -- self explanatory functions
 function PeerModListHighlights:crimenet_checkmod()
 	if modworkshopmodName ~= nil then
-		Steam:overlay_activate("url", "https://modworkshop.net/find/mod?q=" .. modworkshopmodName .. "&tags=&gid=1")
+		managers.network.account:overlay_activate("url", "https://modworkshop.net/find/mod?q=" .. modworkshopmodName .. "&tags=&gid=1")
 	else
-		Steam:overlay_activate("url", "https://modworkshop.net")
+		managers.network.account:overlay_activate("url", "https://modworkshop.net")
 	end
 end
 
 function PeerModListHighlights:crimenet_checkmodbyid()
 	if modworkshopmodID ~= nil then
-		Steam:overlay_activate("url", "https://modworkshop.net/find/mod?q=" .. modworkshopmodID .. "&tags=&gid=1")
+		managers.network.account:overlay_activate("url", "https://modworkshop.net/find/mod?q=" .. modworkshopmodID .. "&tags=&gid=1")
 	else
-		Steam:overlay_activate("url", "https://modworkshop.net")
+		managers.network.account:overlay_activate("url", "https://modworkshop.net")
 	end
 end
 
