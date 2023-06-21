@@ -250,7 +250,7 @@ end
 
 function PeerModListHighlights:checkmod()
 	if modworkshopmodName ~= nil then
-		managers.network.account:overlay_activate("url", "https://modworkshop.net/find/mod?q=" .. modworkshopmodName .. "&tags=&gid=1")
+		managers.network.account:overlay_activate("url", "https://modworkshop.net/search/mods?query=" .. modworkshopmodName)
 	else
 		managers.network.account:overlay_activate("url", "https://modworkshop.net")
 	end
@@ -258,7 +258,7 @@ end
 
 function PeerModListHighlights:checkmodbyid()
 	if modworkshopmodID ~= nil then
-		managers.network.account:overlay_activate("url", "https://modworkshop.net/find/mod?q=" .. modworkshopmodID .. "&tags=&gid=1")
+		managers.network.account:overlay_activate("url", "https://modworkshop.net/search/mods?query=" .. modworkshopmodID)
 	else
 		managers.network.account:overlay_activate("url", "https://modworkshop.net")
 	end
