@@ -1,9 +1,9 @@
 {
 	"name" : "Peer mod list highlighter",
-	"description" : "Will highlight mods of your choosing in any peer's mod list or on Crime.net lobby screen. \nGo to lua/base.lua to add mods manualy",
+	"description" : "Will highlight mods of your choosing in any peer's mod list or on Crime.net lobby screen. Go to lua/base.lua to add mods manualy",
 	"author" : "irbizzelus",
 	"contact" : "Steam profile link is on my modworkshop account",
-	"version" : "3.6.16",
+	"version" : "3.6.17",
 	"hooks" : [
 		{ "hook_id" : "lib/managers/menumanagerpd2", "script_path" : "lua/menumanagerpd2.lua" },
 		{ "hook_id" : "lib/managers/menu/crimenetcontractgui", "script_path" : "lua/crimenetcontractgui.lua" },
