@@ -24,5 +24,8 @@
 	"PMLH_list": " list",
 	"PMLH_adjustmenutitle": "Peer Mod List Highlighter",
 	"PMLH_adjustmenuquestion": "What do you want to do?",
-	"PMLH_cancelbutton": "Cancel"
+	"PMLH_cancelbutton": "Cancel",
+	
+	"PMLH_patch_notes": "Patch Notes",
+	"PMLH_patch_notes_desc": "Press this button to open latest patch notes in your overlay browser.",
 }

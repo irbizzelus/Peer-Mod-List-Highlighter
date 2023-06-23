@@ -24,5 +24,8 @@
 	"PMLH_list": " списка",
 	"PMLH_adjustmenutitle": "Peer Mod List Highlighter",
 	"PMLH_adjustmenuquestion": "Что вы хотите сделать?",
-	"PMLH_cancelbutton": "Отменить"
+	"PMLH_cancelbutton": "Отменить",
+	
+	"PMLH_patch_notes": "Информация о патче",
+	"PMLH_patch_notes_desc": "Нажмите на эту кнопку чтобы открыть информацию об изменениях последнего патча в оверлей браузере.",
 }

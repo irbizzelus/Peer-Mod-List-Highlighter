@@ -110,6 +110,10 @@ Hooks:Add('MenuManagerInitialize', 'PMLH_menuinit', function(menu_manager)
 		PeerModListHighlights:resetslidercolours()
 		managers.menu:active_menu().renderer:active_node_gui():refresh_gui(ournode)
 	end
+	
+	MenuCallbackHandler.PMLHcb_patch_notes = function(this, item)
+		managers.network.account:overlay_activate("url", "https://github.com/irbizzelus/Peer-Mod-List-Highlighter/releases")
+	end
 
 	PeerModListHighlights:Load_listconfig()
 
