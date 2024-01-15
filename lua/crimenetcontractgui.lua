@@ -1,13 +1,13 @@
-dofile(ModPath .. "lua/base.lua")
+if not PeerModListHighlights then
+	dofile(ModPath .. "lua/base.lua")
+end
 
--- You dont need to make any changes in this file to customize this mod. If you dont know what you are doing, you may crash your game.
+local local_pmlh_mod_id = nil
+local local_pmlh_mod_name = nil
+local original_init_node = CrimeNetContractGui.init
 
--- Yes, we overwrite init function. Why? because i cant be bothered to do it otherwise. If we just use part of the code that sets up the mod menu in a post hook
--- it will put text with mod names twice, on top of each other. That just makes letters thick af and not pleasent to look at.
--- Yeah, it probably can be done better if we clear the allready existing menu, and put our menu with coloured text afterwards, but im too lazy for that.
--- If you can figure out a way to do that, god bless, you are probably a better coder, gl with your beginnings.
-
-function CrimeNetContractGui:init(ws, fullscreen_ws, node)
+function CrimeNetContractGui:init_PMLH(ws, fullscreen_ws, node)
+	-- mod adjusments begin @ line 931
 	self._ws = ws
 	self._fullscreen_ws = fullscreen_ws
 	self._panel = self._ws:panel():panel({
@@ -920,6 +920,14 @@ function CrimeNetContractGui:init(ws, fullscreen_ws, node)
 			local _y = 7
 			local add_back = true
 
+			--##########################################--Mod changes start here--############################################--
+			--################################################################################################################--
+			--################################################################################################################--
+			--################################################################################################################--
+			--################################################################################################################--
+			--################################################################################################################--
+			
+			-- add a base mod text line with non-highlighted mods
 			local function add_line(id, text, ignore_back)
 				local canvas = self._mods_scroll:canvas()
 
@@ -937,14 +945,72 @@ function CrimeNetContractGui:init(ws, fullscreen_ws, node)
 				add_back = not add_back
 				text = string.upper(text)
 				
-				
-				--##########################################--Mod changes start here--############################################--
-				
-				-- In short: check if mod name = any of our list's names and switch it's colours accoringly. Yes, you can do the same by just overwriting the colour
-				-- after left_text was created, but i realised it later then i should have, so enjoy this epic ctrl+c ctrl+v showcase :)
 				local left_text = nil
 				local highlight_text = nil
-				if PeerModListHighlights:comparegreen(text) == true then
+				local mod_name = text
+				if PeerModListHighlights.settings.include_mod_folder_crimenet then
+					mod_name = mod_name.." ("..id..")"
+				end
+				if PeerModListHighlights:isModInGreen(text) or PeerModListHighlights:isModInYellow(text) or PeerModListHighlights:isModInRed(text) then
+					-- nothing	
+				else
+					left_text = canvas:text({
+						align = "left",
+						name = id,
+						font = tweak_data.menu.pd2_small_font,
+						font_size = tweak_data.menu.pd2_small_font_size,
+						text = text,
+						x = padding,
+						y = _y,
+						h = tweak_data.menu.pd2_small_font_size,
+						w = canvas:w() - double_padding,
+						color = PeerModListHighlights.settings.crimenetDefaultColour
+					})
+					highlight_text = canvas:text({
+						blend_mode = "add",
+						align = "left",
+						visible = false,
+						name = id,
+						font = tweak_data.menu.pd2_small_font,
+						font_size = tweak_data.menu.pd2_small_font_size,
+						text = mod_name,
+						x = padding,
+						y = _y,
+						h = tweak_data.menu.pd2_small_font_size,
+						w = canvas:w() - double_padding,
+						color = tweak_data.screen_colors.button_stage_2
+					})
+					_y = left_text:bottom() + 2
+				end
+
+				return left_text, highlight_text
+			end
+			
+			-- add green highlighted mod text line
+			local function add_line_highlighted_green(id, text, ignore_back)
+				local canvas = self._mods_scroll:canvas()
+
+				if add_back and not ignore_back then
+					canvas:rect({
+						x = 8,
+						layer = -1,
+						y = _y,
+						h = tweak_data.menu.pd2_small_font_size,
+						w = canvas:w() - 18,
+						color = Color.black:with_alpha(0.7)
+					})
+				end
+
+				add_back = not add_back
+				text = string.upper(text)
+
+				local left_text = nil
+				local highlight_text = nil
+				local mod_name = text
+				if PeerModListHighlights.settings.include_mod_folder_crimenet then
+					mod_name = mod_name.." ("..id..")"
+				end
+				if PeerModListHighlights:isModInGreen(text) then
 					left_text = canvas:text({
 						align = "left",
 						name = id,
@@ -964,14 +1030,46 @@ function CrimeNetContractGui:init(ws, fullscreen_ws, node)
 						name = id,
 						font = tweak_data.menu.pd2_small_font,
 						font_size = tweak_data.menu.pd2_small_font_size,
-						text = text,
+						text = mod_name,
 						x = padding,
 						y = _y,
 						h = tweak_data.menu.pd2_small_font_size,
 						w = canvas:w() - double_padding,
 						color = tweak_data.screen_colors.button_stage_2
 					})
-				elseif PeerModListHighlights:compareyellow(text) == true then
+					_y = left_text:bottom() + 2
+				else
+					-- nothing
+				end
+
+				return left_text, highlight_text
+			end
+			
+			-- add yellow highlighted mod text line
+			local function add_line_highlighted_yellow(id, text, ignore_back)
+				local canvas = self._mods_scroll:canvas()
+
+				if add_back and not ignore_back then
+					canvas:rect({
+						x = 8,
+						layer = -1,
+						y = _y,
+						h = tweak_data.menu.pd2_small_font_size,
+						w = canvas:w() - 18,
+						color = Color.black:with_alpha(0.7)
+					})
+				end
+
+				add_back = not add_back
+				text = string.upper(text)
+
+				local left_text = nil
+				local highlight_text = nil
+				local mod_name = text
+				if PeerModListHighlights.settings.include_mod_folder_crimenet then
+					mod_name = mod_name.." ("..id..")"
+				end
+				if PeerModListHighlights:isModInYellow(text) then
 					left_text = canvas:text({
 						align = "left",
 						name = id,
@@ -991,14 +1089,45 @@ function CrimeNetContractGui:init(ws, fullscreen_ws, node)
 						name = id,
 						font = tweak_data.menu.pd2_small_font,
 						font_size = tweak_data.menu.pd2_small_font_size,
-						text = text,
+						text = mod_name,
 						x = padding,
 						y = _y,
 						h = tweak_data.menu.pd2_small_font_size,
 						w = canvas:w() - double_padding,
 						color = tweak_data.screen_colors.button_stage_2
 					})
-				elseif PeerModListHighlights:comparered(text) == true then
+					_y = left_text:bottom() + 2
+				else
+					-- nothing
+				end
+				return left_text, highlight_text
+			end
+			
+			-- add red highlighted mod text line
+			local function add_line_highlighted_red(id, text, ignore_back)
+				local canvas = self._mods_scroll:canvas()
+
+				if add_back and not ignore_back then
+					canvas:rect({
+						x = 8,
+						layer = -1,
+						y = _y,
+						h = tweak_data.menu.pd2_small_font_size,
+						w = canvas:w() - 18,
+						color = Color.black:with_alpha(0.7)
+					})
+				end
+
+				add_back = not add_back
+				text = string.upper(text)
+				
+				local left_text = nil
+				local highlight_text = nil
+				local mod_name = text
+				if PeerModListHighlights.settings.include_mod_folder_crimenet then
+					mod_name = mod_name.." ("..id..")"
+				end
+				if PeerModListHighlights:isModInRed(text) then
 					left_text = canvas:text({
 						align = "left",
 						name = id,
@@ -1018,61 +1147,80 @@ function CrimeNetContractGui:init(ws, fullscreen_ws, node)
 						name = id,
 						font = tweak_data.menu.pd2_small_font,
 						font_size = tweak_data.menu.pd2_small_font_size,
-						text = text,
+						text = mod_name,
 						x = padding,
 						y = _y,
 						h = tweak_data.menu.pd2_small_font_size,
 						w = canvas:w() - double_padding,
 						color = tweak_data.screen_colors.button_stage_2
 					})
+					_y = left_text:bottom() + 2
 				else
-					left_text = canvas:text({
-						align = "left",
-						name = id,
-						font = tweak_data.menu.pd2_small_font,
-						font_size = tweak_data.menu.pd2_small_font_size,
-						text = text,
-						x = padding,
-						y = _y,
-						h = tweak_data.menu.pd2_small_font_size,
-						w = canvas:w() - double_padding,
-						color = PeerModListHighlights.crimenet_defaultcolour
-					})
-					highlight_text = canvas:text({
-						blend_mode = "add",
-						align = "left",
-						visible = false,
-						name = id,
-						font = tweak_data.menu.pd2_small_font,
-						font_size = tweak_data.menu.pd2_small_font_size,
-						text = text,
-						x = padding,
-						y = _y,
-						h = tweak_data.menu.pd2_small_font_size,
-						w = canvas:w() - double_padding,
-						color = tweak_data.screen_colors.button_stage_2
-					})
+					-- nothing
 				end
-				_y = left_text:bottom() + 2
-
+				
 				return left_text, highlight_text
 			end
-			
-			
-			--####################################--Mod changes end here--########################################--
-			
-			
+					
 			local splits = string.split(mods_presence, "|")
 
+			-- go through our splited string containing mod names, checking against greens, then yellows, then reds in that order, to put them on top, then adding the rest
+			-- im probably dumb, and there's a more optimal way of doing this sorting shit, but who cares, running through the same string split 4 times may only be harmful if its like 50k charachters long 
+			for i = 1, #splits, 2 do
+				local text, highlight = add_line_highlighted_green(splits[i + 1] or "", splits[i] or "")
+				if text == nil or highlight == nil then
+					-- nope
+				else
+					table.insert(self._mod_items, {
+						text,
+						highlight
+					})
+				end		
+			end
+			
+			for i = 1, #splits, 2 do
+				local text, highlight = add_line_highlighted_yellow(splits[i + 1] or "", splits[i] or "")
+				if text == nil or highlight == nil then
+					-- nope
+				else
+					table.insert(self._mod_items, {
+						text,
+						highlight
+					})
+				end		
+			end
+			
+			for i = 1, #splits, 2 do
+				local text, highlight = add_line_highlighted_red(splits[i + 1] or "", splits[i] or "")
+				if text == nil or highlight == nil then
+					-- nope
+				else
+					table.insert(self._mod_items, {
+						text,
+						highlight
+					})
+				end		
+			end
+			
 			for i = 1, #splits, 2 do
 				local text, highlight = add_line(splits[i + 1] or "", splits[i] or "")
-
-				table.insert(self._mod_items, {
-					text,
-					highlight
-				})
+				if text == nil or highlight == nil then
+					-- nope
+				else
+					table.insert(self._mod_items, {
+						text,
+						highlight
+					})
+				end	
 			end
 
+			--##############--Mod changes for this function end here, some other mod stuff is below --############--
+			--####################################################################################################--
+			--####################################################################################################--
+			--####################################################################################################--
+			--####################################################################################################--
+			--####################################################################################################--
+			
 			add_line("spacer", "", true)
 			self._mods_scroll:update_canvas_size()
 		end
@@ -1229,12 +1377,23 @@ function CrimeNetContractGui:init(ws, fullscreen_ws, node)
 	self._potential_show_max = false
 end
 
+-- a fututre proof of sorts: if creating crime.net screen fails with my version, we use the default function
+-- should only fail with new game updates, which likely wont do any harm at this point
+function CrimeNetContractGui:init(ws, fullscreen_ws, node)
+	
+	if pcall(function() self:init_PMLH(ws, fullscreen_ws, node) end) then
+		self:close() -- clear pcall variant to avoid duplication of crime.net screen
+		return self:init_PMLH(ws, fullscreen_ws, node)
+	else
+		log("[PMLH] ERROR: CrimeNetContractGui:init function override is damaged, using default function. Check PMLH for updates.")
+		self:close()
+		return original_init_node(self, ws, fullscreen_ws, node)
+	end
 
--- And again, we overwrite a function. Pretty sure that it will rarely cause issues. Issues will arrise if either ovkl change something here, which they probably wont
--- or a different mod tries to use this function for something. So should be ok?
-local modworkshopmodID = nil
-local modworkshopmodName = nil
-function CrimeNetContractGui:mouse_pressed(o, button, x, y) -- create our menu on right click here
+end
+
+-- new menu on the mod's name left click
+function CrimeNetContractGui:mouse_pressed(o, button, x, y)
 	if alive(self._briefing_len_panel) and self._briefing_len_panel:visible() and self._step > 2 and self._briefing_len_panel:child("button_text"):inside(x, y) then
 		self:toggle_post_event()
 	end
@@ -1251,18 +1410,18 @@ function CrimeNetContractGui:mouse_pressed(o, button, x, y) -- create our menu o
 		end
 	end
 	
-	if self._mod_items and self._mods_tab and self._mods_tab:is_active() and button == Idstring("1") then
+	if self._mod_items and self._mods_tab and self._mods_tab:is_active() and button == Idstring("0") then
 		for _, item in ipairs(self._mod_items) do
 			if item[1]:inside(x, y) then
-				modworkshopmodID = item[1]:name()
-				modworkshopmodName = item[1]:text()
+				local_pmlh_mod_id = item[1]:name()
+				local_pmlh_mod_name = item[1]:text()
 				local menu_options = {}
 				menu_options[#menu_options+1] ={text = managers.localization:text("PMLH_searchmodname"), data = nil, callback = PeerModListHighlights.crimenet_checkmod}
 				menu_options[#menu_options+1] ={text = managers.localization:text("PMLH_searchmodfolder"), data = nil, callback = PeerModListHighlights.crimenet_checkmodbyid}
 				menu_options[#menu_options+1] ={text = "", is_cancel_button = false}
-				menu_options[#menu_options+1] ={text = managers.localization:text("PMLH_adjustmod") .. managers.localization:text("PMLH_list1name") .. managers.localization:text("PMLH_list"), data = nil, callback = PeerModListHighlights.crimenet_addmodto1}
-				menu_options[#menu_options+1] ={text = managers.localization:text("PMLH_adjustmod") .. managers.localization:text("PMLH_list2name") .. managers.localization:text("PMLH_list"), data = nil, callback = PeerModListHighlights.crimenet_addmodto2}
-				menu_options[#menu_options+1] ={text = managers.localization:text("PMLH_adjustmod") .. managers.localization:text("PMLH_list3name") .. managers.localization:text("PMLH_list"), data = nil, callback = PeerModListHighlights.crimenet_addmodto3}
+				menu_options[#menu_options+1] ={text = managers.localization:text("PMLH_adjustmod") .. managers.localization:text("PMLH_list1name") .. managers.localization:text("PMLH_list"), data = nil, callback = PeerModListHighlights.addModToList_1_CN}
+				menu_options[#menu_options+1] ={text = managers.localization:text("PMLH_adjustmod") .. managers.localization:text("PMLH_list2name") .. managers.localization:text("PMLH_list"), data = nil, callback = PeerModListHighlights.addModToList_2_CN}
+				menu_options[#menu_options+1] ={text = managers.localization:text("PMLH_adjustmod") .. managers.localization:text("PMLH_list3name") .. managers.localization:text("PMLH_list"), data = nil, callback = PeerModListHighlights.addModToList_3_CN}
 				menu_options[#menu_options+1] ={text = managers.localization:text("PMLH_cancelbutton"), is_cancel_button = true}
 				local menu = QuickMenu:new(managers.localization:text("PMLH_adjustmenutitle"), managers.localization:text("PMLH_adjustmenuquestion"), menu_options)
 				menu:Show()
@@ -1274,93 +1433,30 @@ end
 
 -- self explanatory functions
 function PeerModListHighlights:crimenet_checkmod()
-	if modworkshopmodName ~= nil then
-		managers.network.account:overlay_activate("url", "https://modworkshop.net/search/mods?query=" .. modworkshopmodName)
+	if local_pmlh_mod_name ~= nil then
+		managers.network.account:overlay_activate("url", "https://modworkshop.net/search/mods?query=" .. local_pmlh_mod_name)
 	else
 		managers.network.account:overlay_activate("url", "https://modworkshop.net")
 	end
 end
 
 function PeerModListHighlights:crimenet_checkmodbyid()
-	if modworkshopmodID ~= nil then
-		managers.network.account:overlay_activate("url", "https://modworkshop.net/search/mods?query=" .. modworkshopmodID)
+	if local_pmlh_mod_id ~= nil then
+		managers.network.account:overlay_activate("url", "https://modworkshop.net/search/mods?query=" .. local_pmlh_mod_id)
 	else
 		managers.network.account:overlay_activate("url", "https://modworkshop.net")
 	end
 end
 
--- this is same as in menumanagerpd2, so go there if you want comments
-function PeerModListHighlights:crimenet_addmodto1() 
-    local file = io.open(SavePath .. 'PMLH_save.txt', 'w+')
-	local modlocation = nil
-    if file then
-		if PeerModListHighlights:comparegreen(string.upper(modworkshopmodName)) ~= true then
-			if PeerModListHighlights:compareyellow(string.upper(modworkshopmodName)) == true then
-				modlocation = PeerModListHighlights.findlocinyellow(self,string.upper(modworkshopmodName))
-				table.remove(PeerModListHighlights.lists.yellowlist, modlocation)
-			end
-			if PeerModListHighlights:comparered(string.upper(modworkshopmodName)) == true then
-				modlocation = PeerModListHighlights.findlocinred(self,string.upper(modworkshopmodName))
-				table.remove(PeerModListHighlights.lists.redlist, modlocation)
-			end
-			table.insert(PeerModListHighlights.lists.greenlist, string.upper(modworkshopmodName))
-			file:write(json.encode(PeerModListHighlights.lists))
-			file:close()
-		else
-			modlocation = PeerModListHighlights.findlocingreen(self,string.upper(modworkshopmodName))
-			table.remove(PeerModListHighlights.lists.greenlist, modlocation)
-			file:write(json.encode(PeerModListHighlights.lists))
-			file:close()
-		end
-    end
+-- calls for the function that updates the lists, without updating UI (yet? no. forever, bcuz this UI stuff is bullshit)
+function PeerModListHighlights.addModToList_1_CN()
+	PeerModListHighlights:addModToList_1(local_pmlh_mod_name)
 end
 
-function PeerModListHighlights:crimenet_addmodto2()
-    local file = io.open(SavePath .. 'PMLH_save.txt', 'w+')
-	local modlocation = nil
-    if file then
-		if PeerModListHighlights:compareyellow(string.upper(modworkshopmodName)) ~= true then
-			if PeerModListHighlights:comparegreen(string.upper(modworkshopmodName)) == true then
-				modlocation = PeerModListHighlights.findlocingreen(self,string.upper(modworkshopmodName))
-				table.remove(PeerModListHighlights.lists.greenlist, modlocation)
-			end
-			if PeerModListHighlights:comparered(string.upper(modworkshopmodName)) == true then
-				modlocation = PeerModListHighlights.findlocinred(self,string.upper(modworkshopmodName))
-				table.remove(PeerModListHighlights.lists.redlist, modlocation)
-			end
-			table.insert(PeerModListHighlights.lists.yellowlist, string.upper(modworkshopmodName))
-			file:write(json.encode(PeerModListHighlights.lists))
-			file:close()	
-		else
-			modlocation = PeerModListHighlights.findlocinyellow(self,string.upper(modworkshopmodName))
-			table.remove(PeerModListHighlights.lists.yellowlist, modlocation)
-			file:write(json.encode(PeerModListHighlights.lists))
-			file:close()
-		end
-    end
+function PeerModListHighlights.addModToList_2_CN()
+	PeerModListHighlights:addModToList_2(local_pmlh_mod_name)
 end
 
-function PeerModListHighlights:crimenet_addmodto3()
-    local file = io.open(SavePath .. 'PMLH_save.txt', 'w+')
-	local modlocation = nil
-    if file then
-		if PeerModListHighlights:comparered(string.upper(modworkshopmodName)) ~= true then
-			if PeerModListHighlights:compareyellow(string.upper(modworkshopmodName)) == true then
-				modlocation = PeerModListHighlights.findlocinyellow(self,string.upper(modworkshopmodName))
-				table.remove(PeerModListHighlights.lists.yellowlist, modlocation)
-			end
-			if PeerModListHighlights:comparegreen(string.upper(modworkshopmodName)) == true then
-				modlocation = PeerModListHighlights.findlocingreen(self,string.upper(modworkshopmodName))
-				table.remove(PeerModListHighlights.lists.greenlist, modlocation)
-			end
-			table.insert(PeerModListHighlights.lists.redlist, string.upper(modworkshopmodName))
-			file:write(json.encode(PeerModListHighlights.lists))
-			file:close()
-		else
-			modlocation = PeerModListHighlights.findlocinred(self,string.upper(modworkshopmodName))
-			table.remove(PeerModListHighlights.lists.redlist, modlocation)
-			file:write(json.encode(PeerModListHighlights.lists))
-			file:close()
-		end
-    end
+function PeerModListHighlights.addModToList_3_CN()
+	PeerModListHighlights:addModToList_3(local_pmlh_mod_name)
 end

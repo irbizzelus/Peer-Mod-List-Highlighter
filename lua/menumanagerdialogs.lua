@@ -1,9 +1,9 @@
-dofile(ModPath .. "lua/base.lua")
+if not PeerModListHighlights then
+	dofile(ModPath .. "lua/base.lua")
+end
 
--- You dont need to make any changes in this file to customize this mod. If you dont know what you are doing, you may crash your game.
-
--- yep, its mostly taken from void ui, but tweaked into this horrible mess to make sure that coloured mods go on top of the list
--- oh and for some reason id and nick values are not what they seem
+-- Yep, its mostly taken from void ui, but tweaked into this horrible mess to make sure that coloured mods go on top of the list
+-- Oh and for some reason id and nick seem to be reversed?
 Hooks:PostHook(MenuManager,"show_person_joining","PMLHjoinmodlistOn",function(id, nick)
 	if not managers.hud or not managers.hud:script(PlayerBase.PLAYER_INFO_HUD_FULLSCREEN_PD2) or managers.hud:script(PlayerBase.PLAYER_INFO_HUD_FULLSCREEN_PD2).panel:child("user_dropin" .. tostring(id)) then
 		return
@@ -22,7 +22,7 @@ Hooks:PostHook(MenuManager,"show_person_joining","PMLHjoinmodlistOn",function(id
 			name = "PMLHmods_title",
 			font_size = 21,
 			font = tweak_data.menu.pd2_large_font,
-			text = managers.localization:text("joinplayer_list_mods"),
+			text = managers.localization:text("PMLH_joinplayer_list_mods_1")..tostring(peer:name())..managers.localization:text("PMLH_joinplayer_list_mods_2"),
 			align = "right",
 			y = 5,
 			layer = 2,
@@ -32,13 +32,17 @@ Hooks:PostHook(MenuManager,"show_person_joining","PMLHjoinmodlistOn",function(id
 		local last_mod
 		local topmodcounter = 0
 		PeerModListHighlights._joining_mods = {}
-		for i, mod in ipairs(peer:synced_mods()) do -- cycle every mod, search for green ones, put on top of the list Y postition wise, and in our array(table)
-			if PeerModListHighlights:comparegreen(string.upper(mod.name)) == true then
+		for i, mod in ipairs(peer:synced_mods()) do -- cycle every mod, search for green ones, put on top of the list Y postition wise, and into our array(table)
+			local mod_name = mod.name
+			if PeerModListHighlights.settings.include_mod_folder_join then
+				mod_name = mod_name.." ("..mod.id..")"
+			end
+			if PeerModListHighlights:isModInGreen(mod.name) then
 				last_mod = modslist_panel:text({
 					name = "PMLHmod_" .. tostring(i),
 					font_size = 21,
 					font = tweak_data.menu.pd2_large_font,
-					text = mod.name,
+					text = mod_name,
 					align = "right",
 					y = topmodcounter * (21) + 30,
 					layer = 2,
@@ -49,12 +53,16 @@ Hooks:PostHook(MenuManager,"show_person_joining","PMLHjoinmodlistOn",function(id
 			end
 		end
 		for i, mod in ipairs(peer:synced_mods()) do -- same as green but yellow
-			if PeerModListHighlights:compareyellow(string.upper(mod.name)) == true then		
+			local mod_name = mod.name
+			if PeerModListHighlights.settings.include_mod_folder_join then
+				mod_name = mod_name.." ("..mod.id..")"
+			end
+			if PeerModListHighlights:isModInYellow(mod.name) then		
 				last_mod = modslist_panel:text({
 					name = "PMLHmod_" .. tostring(i),
 					font_size = 21,
 					font = tweak_data.menu.pd2_large_font,
-					text = mod.name,
+					text = mod_name,
 					align = "right",
 					y = topmodcounter * (21) + 30,
 					layer = 2,
@@ -65,12 +73,16 @@ Hooks:PostHook(MenuManager,"show_person_joining","PMLHjoinmodlistOn",function(id
 			end
 		end
 		for i, mod in ipairs(peer:synced_mods()) do -- red
-			if PeerModListHighlights:comparered(string.upper(mod.name)) == true then
+			local mod_name = mod.name
+			if PeerModListHighlights.settings.include_mod_folder_join then
+				mod_name = mod_name.." ("..mod.id..")"
+			end
+			if PeerModListHighlights:isModInRed(mod.name) then
 				last_mod = modslist_panel:text({
 					name = "PMLHmod_" .. tostring(i),
 					font_size = 21,
 					font = tweak_data.menu.pd2_large_font,
-					text = mod.name,
+					text = mod_name,
 					align = "right",
 					y = topmodcounter * (21) + 30,
 					layer = 2,
@@ -81,16 +93,20 @@ Hooks:PostHook(MenuManager,"show_person_joining","PMLHjoinmodlistOn",function(id
 			end
 		end
 		for i, mod in ipairs(peer:synced_mods()) do -- all the other mods
-			if PeerModListHighlights:comparegreen(string.upper(mod.name)) == false and PeerModListHighlights:compareyellow(string.upper(mod.name)) == false and PeerModListHighlights:comparered(string.upper(mod.name)) == false then
+			local mod_name = mod.name
+			if PeerModListHighlights.settings.include_mod_folder_join then
+				mod_name = mod_name.." ("..mod.id..")"
+			end
+			if not PeerModListHighlights:isModInGreen(mod.name) and not PeerModListHighlights:isModInYellow(mod.name) and not PeerModListHighlights:isModInRed(mod.name) then
 				last_mod = modslist_panel:text({
 					name = "PMLHmod_" .. tostring(i),
 					font_size = 21,
 					font = tweak_data.menu.pd2_large_font,
-					text = mod.name,
+					text = mod_name,
 					align = "right",
 					y = topmodcounter * (21) + 30,
 					layer = 2,
-					color = PeerModListHighlights.joindefaultcolour
+					color = PeerModListHighlights.settings.joinListDefaultColour
 				})
 				topmodcounter = topmodcounter + 1
 				table.insert(PeerModListHighlights._joining_mods, last_mod)

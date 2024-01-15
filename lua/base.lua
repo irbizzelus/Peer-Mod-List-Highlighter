@@ -5,11 +5,15 @@ end
 PeerModListHighlights.savepath = SavePath .. 'PMLH_save.txt'
 PeerModListHighlights.modpath = ModPath
 
--- this terribleness is made this way, because i cant figure out how to make sliders in game save values properly
--- if i make a list(array) for a green list with 3 colours, it will work fine, but whenever i reboot the game
--- and go back to settings, sliders will have default values for their colour, even though new values are stored properly
--- in the save file and mod names are highlighted with changed colours. Why? 
+-- This terribleness is made this way, because i cant figure out how to make sliders in game save values properly.
+-- If i make an array for a green mod list with 3 colours, it will work fine at first, but whenever i reboot the game
+-- and go back to the settings, sliders will have default values for their colour, even though new values 
+-- are stored properly in the save file and mod names are highlighted with changed colours. Why?
 PeerModListHighlights.settings = { 
+	include_mod_folder_player_menu = false,
+	include_mod_folder_crimenet = true,
+	include_mod_folder_join = false,
+	profile_button = true,
 	join_mods = true,
 	Glistcolour1 = 0,
 	Glistcolour2 = 255,
@@ -19,27 +23,35 @@ PeerModListHighlights.settings = {
 	Ylistcolour3 = 20,
 	Rlistcolour1 = 200,
 	Rlistcolour2 = 0,
-	Rlistcolour3 = 0
+	Rlistcolour3 = 0,
+	
+	------########################## GO HERE TO CHANGE DEFAULT COLOURS #############################------
+
+	-- As of update 3.7 default colours are now saved to your save file, so you dont have to change them every time a patch comes out.
+	
+	-- You can change your default colours here. To do so, replace default values with your colour of choice.
+	-- Valid format for your colour: "Color( 255, R, G, B ) / 255" (without ""), where R G and B stand for 'red' 'green' and 'blue' colour values. RGB values can not be less then 0 or more then 255.
+	-- Game uses values between 0 and 1 which scale proportionally to the 255 rgb value, that's why joinList has a value of 1 1 1 1, thats just RGB for 255 255 255.
+	-- That's why you can use the /255 at the end - so that you dont have to caluclate the RGB value when its converted to 0-1 range.
+	-- If you are wondering, the very first value stands for transparency (i think), so keep it at 1, unless you want blurry and hard to see words.
+	-- Also, don't forget about comas at the end of your values, this is an array of values after all.
+	-- Reminder: 'menuDefaultColour' is for peer's mod lists and by default is set to a string "default". Crime.net default is 'Color(0.8, 0.8, 0.8)'.
+	-- 'joinListDefaultColour' is for the list created when someone is joining your lobby, default value: Color(1, 1, 1, 1).
+	
+	menuDefaultColour = "default",
+	crimenetDefaultColour = Color(0.8, 0.8, 0.8),
+	joinListDefaultColour = Color(1, 1, 1, 1), -- white
+	
 }
 
+-- assign list colours after we load individual values from the save file
 function PeerModListHighlights:loadlistcolours()
-
-PeerModListHighlights.greencolour = Color( 255, PeerModListHighlights.settings.Glistcolour1, PeerModListHighlights.settings.Glistcolour2, PeerModListHighlights.settings.Glistcolour3 ) / 255
-PeerModListHighlights.yellowcolour = Color( 255, PeerModListHighlights.settings.Ylistcolour1, PeerModListHighlights.settings.Ylistcolour2, PeerModListHighlights.settings.Ylistcolour3 ) / 255
-PeerModListHighlights.redcolour = Color( 255, PeerModListHighlights.settings.Rlistcolour1, PeerModListHighlights.settings.Rlistcolour2, PeerModListHighlights.settings.Rlistcolour3 ) / 255
-
-------########################## GO HERE TO CHANGE DEFAULT COLOURS #############################------
-
--- You can change your default colours here. It's done pretty much the same way as in older versions, just replace default values with your colour
--- Valid format for your colour: Color( 255, R, G, B ) / 255, where R G B stand for red green and blue values. RGB values cant be less then 0 or more then 255
--- Reminder: 'defaultcolour' is for peer mod lists and by default is '1'. Crime.net default is 'Color(0.8, 0.8, 0.8)'. 'joindefaultcolour' is for the list created when someone is joining your lobby
-
-PeerModListHighlights.defaultcolour = 1
-PeerModListHighlights.crimenet_defaultcolour = Color(0.8, 0.8, 0.8)
-PeerModListHighlights.joindefaultcolour = Color( 255, 255, 255, 255 ) / 255 -- just white
-
+	PeerModListHighlights.greencolour = Color( 255, PeerModListHighlights.settings.Glistcolour1, PeerModListHighlights.settings.Glistcolour2, PeerModListHighlights.settings.Glistcolour3 ) / 255
+	PeerModListHighlights.yellowcolour = Color( 255, PeerModListHighlights.settings.Ylistcolour1, PeerModListHighlights.settings.Ylistcolour2, PeerModListHighlights.settings.Ylistcolour3 ) / 255
+	PeerModListHighlights.redcolour = Color( 255, PeerModListHighlights.settings.Rlistcolour1, PeerModListHighlights.settings.Rlistcolour2, PeerModListHighlights.settings.Rlistcolour3 ) / 255
 end
 
+-- at this point its not only the list config, but also the additional settings, but whatevs
 function PeerModListHighlights:Save_listconfig()
     local file = io.open(SavePath .. 'PMLH_save_listsconfig.txt', 'w+')
     if file then
@@ -63,6 +75,8 @@ PeerModListHighlights:Save_listconfig()
 PeerModListHighlights:loadlistcolours()
 	
 
+-- This "old version upgrade" part is some legacy stuff, and most likely not needed for anyone, other then people who are somewhow still using a version from almost a year ago.
+-- Still somewhat usefull if you want to add mod names i guess, but you are better of just adding them to the save file manually.
 
 ---------###################### OLD VERSION UPGRADES/MANUAL MOD ADDING GUIDE ###########################---------
 
@@ -132,6 +146,7 @@ PeerModListHighlights.lists ={
 	}
 }
 
+-- purely for mod names
 function PeerModListHighlights:save()
     local file = io.open(PeerModListHighlights.savepath, 'w+')
     if file then
@@ -153,64 +168,92 @@ end
 PeerModListHighlights.load()
 PeerModListHighlights:save()
 
+local PMLH_List_1 = PeerModListHighlights.lists.greenlist
+local PMLH_List_2 = PeerModListHighlights.lists.yellowlist
+local PMLH_List_3 = PeerModListHighlights.lists.redlist
 
-function PeerModListHighlights:comparegreen(text)
-	if table.getn(PeerModListHighlights.lists.greenlist) >= 1 then
-		for i=1, table.getn(PeerModListHighlights.lists.greenlist) do
-			if text == PeerModListHighlights.lists.greenlist[i] then
-				return true
-			end
-		end
-	end
-	return false
+-- returns true/false if a name is found in our save file with mod names
+function PeerModListHighlights:isModInGreen(text)
+	return table.contains(PMLH_List_1, string.upper(text))
 end
 
-function PeerModListHighlights:compareyellow(text)
-	if table.getn(PeerModListHighlights.lists.yellowlist) >= 1 then
-		for i=1, table.getn(PeerModListHighlights.lists.yellowlist) do
-			if text == PeerModListHighlights.lists.yellowlist[i] then
-				return true
-			end
-		end
-	end
-	return false
+function PeerModListHighlights:isModInYellow(text)
+	return table.contains(PMLH_List_2, string.upper(text))
 end
 
-function PeerModListHighlights:comparered(text)
-	if table.getn(PeerModListHighlights.lists.redlist) >= 1 then
-		for i=1, table.getn(PeerModListHighlights.lists.redlist) do
-			if text == PeerModListHighlights.lists.redlist[i] then
-				return true
-			end
-		end
-	end
-	return false
+function PeerModListHighlights:isModInRed(text)
+	return table.contains(PMLH_List_3, string.upper(text))
 end
 
-function PeerModListHighlights:findlocingreen(text)
-	for i=1, table.getn(PeerModListHighlights.lists.greenlist) do
-		if text == PeerModListHighlights.lists.greenlist[i] then
-			return i
+-- functions to add, remove and move mods in between lists, using the pop up menu in crime.net/player list
+function PeerModListHighlights:addModToList_1(local_pmlh_mod_name)
+    local file = io.open(SavePath .. 'PMLH_save.txt', 'w+')
+    if file then
+		-- if we decide to add to green, and mod is not in green yet
+		if not self:isModInGreen(local_pmlh_mod_name) then
+		
+			-- check if it's allready in yellow to remove it from there. mod can be only in 1 list
+			if self:isModInYellow(local_pmlh_mod_name) then
+				table.delete(PMLH_List_2, string.upper(local_pmlh_mod_name))
+			end
+			
+			-- same as yellow but red
+			if self:isModInRed(local_pmlh_mod_name) then
+				table.delete(PMLH_List_3, string.upper(local_pmlh_mod_name))
+			end
+			
+			-- finally add it to green and update the save file
+			table.insert(PMLH_List_1, string.upper(local_pmlh_mod_name))
+			file:write(json.encode(self.lists))
+			file:close()
+			
+		else
+			-- if mod is allready in green, remove it from green
+			table.delete(PMLH_List_1, string.upper(local_pmlh_mod_name))
+			file:write(json.encode(self.lists))
+			file:close()
 		end
-	end
+    end
 end
 
-function PeerModListHighlights:findlocinyellow(text)
-	if table.getn(PeerModListHighlights.lists.yellowlist) >= 1 then
-		for i=1, table.getn(PeerModListHighlights.lists.yellowlist) do
-			if text == PeerModListHighlights.lists.yellowlist[i] then
-				return i
+function PeerModListHighlights:addModToList_2(local_pmlh_mod_name) -- same for yellow
+    local file = io.open(SavePath .. 'PMLH_save.txt', 'w+')
+    if file then
+		if not self:isModInYellow(local_pmlh_mod_name) then
+			if self:isModInGreen(local_pmlh_mod_name) then
+				table.delete(PMLH_List_1, string.upper(local_pmlh_mod_name))
 			end
+			if self:isModInRed(local_pmlh_mod_name) then
+				table.delete(PMLH_List_3, string.upper(local_pmlh_mod_name))
+			end
+			table.insert(PMLH_List_2, string.upper(local_pmlh_mod_name))
+			file:write(json.encode(self.lists))
+			file:close()	
+		else
+			table.delete(PMLH_List_2, string.upper(local_pmlh_mod_name))
+			file:write(json.encode(self.lists))
+			file:close()
 		end
-	end
+    end
 end
 
-function PeerModListHighlights:findlocinred(text)
-	if table.getn(PeerModListHighlights.lists.redlist) >= 1 then
-		for i=1, table.getn(PeerModListHighlights.lists.redlist) do
-			if text == PeerModListHighlights.lists.redlist[i] then
-				return i
+function PeerModListHighlights:addModToList_3(local_pmlh_mod_name) -- red
+    local file = io.open(SavePath .. 'PMLH_save.txt', 'w+')
+    if file then
+		if not self:isModInRed(local_pmlh_mod_name) then
+			if self:isModInYellow(local_pmlh_mod_name) then
+				table.delete(PMLH_List_2, string.upper(local_pmlh_mod_name))
 			end
+			if self:isModInGreen(local_pmlh_mod_name) then
+				table.delete(PMLH_List_1, string.upper(local_pmlh_mod_name))
+			end
+			table.insert(PMLH_List_3, string.upper(local_pmlh_mod_name))
+			file:write(json.encode(self.lists))
+			file:close()
+		else
+			table.delete(PMLH_List_3, string.upper(local_pmlh_mod_name))
+			file:write(json.encode(self.lists))
+			file:close()
 		end
-	end
+    end
 end

@@ -16,20 +16,60 @@
 			"default_value" : true
 		},
 		{
+			"type" : "toggle",
+			"id" : "PMLH_profile_button",
+			"title" : "PMLH_profile_button",
+			"description" : "PMLH_profile_button_desc",
+			"callback" : "cb_PMLH_profile_button",
+			"value" : "profile_button",
+			"default_value" : true
+		},
+		{
+			"type" : "divider",
+			"size" : 22
+		},
+		{
+			"type" : "toggle",
+			"id" : "PMLH_folder_in_player_menu",
+			"title" : "PMLH_folder_in_player_menu",
+			"description" : "PMLH_folder_in_player_menu_desc",
+			"callback" : "cb_PMLH_folder_in_player_menu",
+			"value" : "include_mod_folder_player_menu",
+			"default_value" : false
+		},
+		{
+			"type" : "toggle",
+			"id" : "PMLH_folder_in_crimenet",
+			"title" : "PMLH_folder_in_crimenet",
+			"description" : "PMLH_folder_in_crimenet_desc",
+			"callback" : "cb_PMLH_folder_in_crimenet",
+			"value" : "include_mod_folder_crimenet",
+			"default_value" : true
+		},
+		{
+			"type" : "toggle",
+			"id" : "PMLH_folder_in_joinlist",
+			"title" : "PMLH_folder_in_joinlist",
+			"description" : "PMLH_folder_in_joinlist_desc",
+			"callback" : "PMLH_folder_in_joinlist",
+			"value" : "include_mod_folder_join",
+			"default_value" : false
+		},
+		{
 			"type" : "divider",
 			"size" : 22
 		},
 		{
 			"type" : "button",
-			"id" : "green_header",
-			"title" : "green_header",
+			"id" : "PMLH_green_header",
+			"title" : "PMLH_green_header",
 			"description" : "PMLH_blank",
 			"callback" : "PMLH_donothing"
 		},
 		{
 			"type" : "slider",
 			"id" : "Glistcolour1",
-			"title" : "colour1",
+			"title" : "PMLH_colour1",
 			"description" : "PMLH_blank",
 			"callback" : "cb_Glist_colour1",
 			"value" : "Glistcolour1",
@@ -41,7 +81,7 @@
 		{
 			"type" : "slider",
 			"id" : "Glistcolour2",
-			"title" : "colour2",
+			"title" : "PMLH_colour2",
 			"description" : "PMLH_blank",
 			"callback" : "cb_Glist_colour2",
 			"value" : "Glistcolour2",
@@ -53,7 +93,7 @@
 		{
 			"type" : "slider",
 			"id" : "Glistcolour3",
-			"title" : "colour3",
+			"title" : "PMLH_colour3",
 			"description" : "PMLH_blank",
 			"callback" : "cb_Glist_colour3",
 			"value" : "Glistcolour3",
@@ -65,7 +105,7 @@
 		{
 			"type" : "slider",
 			"id" : "colourshowcase1",
-			"title" : "colourchoice",
+			"title" : "PMLH_colourchoice",
 			"description" : "PMLH_blank",
 			"callback" : "PMLH_donothing",
 			"value" : "colourshowcase1",
@@ -80,15 +120,15 @@
 		},
 		{
 			"type" : "button",
-			"id" : "yellow_header",
-			"title" : "yellow_header",
+			"id" : "PMLH_yellow_header",
+			"title" : "PMLH_yellow_header",
 			"description" : "PMLH_blank",
 			"callback" : "PMLH_donothing"
 		},
 		{
 			"type" : "slider",
 			"id" : "Ylistcolour1",
-			"title" : "colour1",
+			"title" : "PMLH_colour1",
 			"description" : "PMLH_blank",
 			"callback" : "cb_Ylist_colour1",
 			"value" : "Ylistcolour1",
@@ -100,7 +140,7 @@
 		{
 			"type" : "slider",
 			"id" : "Ylistcolour2",
-			"title" : "colour2",
+			"title" : "PMLH_colour2",
 			"description" : "PMLH_blank",
 			"callback" : "cb_Ylist_colour2",
 			"value" : "Ylistcolour2",
@@ -112,7 +152,7 @@
 		{
 			"type" : "slider",
 			"id" : "Ylistcolour3",
-			"title" : "colour3",
+			"title" : "PMLH_colour3",
 			"description" : "PMLH_blank",
 			"callback" : "cb_Ylist_colour3",
 			"value" : "Ylistcolour3",
@@ -124,7 +164,7 @@
 		{
 			"type" : "slider",
 			"id" : "colourshowcase2",
-			"title" : "colourchoice",
+			"title" : "PMLH_colourchoice",
 			"description" : "PMLH_blank",
 			"callback" : "PMLH_donothing",
 			"value" : "colourshowcase2",
@@ -139,15 +179,15 @@
 		},
 		{
 			"type" : "button",
-			"id" : "red_header",
-			"title" : "red_header",
+			"id" : "PMLH_red_header",
+			"title" : "PMLH_red_header",
 			"description" : "PMLH_blank",
 			"callback" : "PMLH_donothing"
 		},
 		{
 			"type" : "slider",
 			"id" : "Rlistcolour1",
-			"title" : "colour1",
+			"title" : "PMLH_colour1",
 			"description" : "PMLH_blank",
 			"callback" : "cb_Rlist_colour1",
 			"value" : "Rlistcolour1",
@@ -159,7 +199,7 @@
 		{
 			"type" : "slider",
 			"id" : "Rlistcolour2",
-			"title" : "colour2",
+			"title" : "PMLH_colour2",
 			"description" : "PMLH_blank",
 			"callback" : "cb_Rlist_colour2",
 			"value" : "Rlistcolour2",
@@ -171,7 +211,7 @@
 		{
 			"type" : "slider",
 			"id" : "Rlistcolour3",
-			"title" : "colour3",
+			"title" : "PMLH_colour3",
 			"description" : "PMLH_blank",
 			"callback" : "cb_Rlist_colour3",
 			"value" : "Rlistcolour3",
@@ -183,7 +223,7 @@
 		{
 			"type" : "slider",
 			"id" : "colourshowcase3",
-			"title" : "colourchoice",
+			"title" : "PMLH_colourchoice",
 			"description" : "PMLH_blank",
 			"callback" : "PMLH_donothing",
 			"value" : "colourshowcase3",

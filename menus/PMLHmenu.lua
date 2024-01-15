@@ -1,4 +1,6 @@
-dofile(ModPath .. "lua/base.lua")
+if not PeerModListHighlights then
+	dofile(ModPath .. "lua/base.lua")
+end
 
 Hooks:Add('LocalizationManagerPostInit', 'PMLH_local', function(loc)
 	local lang = "en"
@@ -32,6 +34,26 @@ Hooks:Add('MenuManagerInitialize', 'PMLH_menuinit', function(menu_manager)
 	
 	MenuCallbackHandler.cb_PMLHjoinmods = function(this, item)
 		PeerModListHighlights.settings.join_mods = item:value() == 'on'
+		PeerModListHighlights:Save_listconfig()
+	end
+	
+	MenuCallbackHandler.cb_PMLH_profile_button = function(this, item)
+		PeerModListHighlights.settings.profile_button = item:value() == 'on'
+		PeerModListHighlights:Save_listconfig()
+	end
+	
+	MenuCallbackHandler.cb_PMLH_folder_in_player_menu = function(this, item)
+		PeerModListHighlights.settings.include_mod_folder_player_menu = item:value() == 'on'
+		PeerModListHighlights:Save_listconfig()
+	end
+	
+	MenuCallbackHandler.cb_PMLH_folder_in_crimenet = function(this, item)
+		PeerModListHighlights.settings.include_mod_folder_crimenet = item:value() == 'on'
+		PeerModListHighlights:Save_listconfig()
+	end
+	
+	MenuCallbackHandler.PMLH_folder_in_joinlist = function(this, item)
+		PeerModListHighlights.settings.include_mod_folder_join = item:value() == 'on'
 		PeerModListHighlights:Save_listconfig()
 	end
 	
@@ -125,23 +147,23 @@ Hooks:PreHook(MenuManager, "_node_selected", "PMLH:myNode", function(self, menu_
 		ournode = node
 		function PeerModListHighlights:resetslidercolours()
 		-- switch 1st showcasing slider's colours, disable it so text is (barely?) visible, since you cant get rid of the text, or slider will be 1px tall :/
-		node._items[7]._slider_color = Color( 255, PeerModListHighlights.settings.Glistcolour1, PeerModListHighlights.settings.Glistcolour2, PeerModListHighlights.settings.Glistcolour3 ) / 255
-		node._items[7]._slider_color_highlight = Color( 255, PeerModListHighlights.settings.Glistcolour1, PeerModListHighlights.settings.Glistcolour2, PeerModListHighlights.settings.Glistcolour3 ) / 255
-		node._items[7]._parameters.disabled_color = Color( 255, PeerModListHighlights.settings.Glistcolour1, PeerModListHighlights.settings.Glistcolour2, PeerModListHighlights.settings.Glistcolour3 ) / 255
-		node._items[7]._show_slider_text = false
-		node._items[7]._enabled = false
+		node._items[12]._slider_color = Color( 255, PeerModListHighlights.settings.Glistcolour1, PeerModListHighlights.settings.Glistcolour2, PeerModListHighlights.settings.Glistcolour3 ) / 255
+		node._items[12]._slider_color_highlight = Color( 255, PeerModListHighlights.settings.Glistcolour1, PeerModListHighlights.settings.Glistcolour2, PeerModListHighlights.settings.Glistcolour3 ) / 255
+		node._items[12]._parameters.disabled_color = Color( 255, PeerModListHighlights.settings.Glistcolour1, PeerModListHighlights.settings.Glistcolour2, PeerModListHighlights.settings.Glistcolour3 ) / 255
+		node._items[12]._show_slider_text = false
+		node._items[12]._enabled = false
 		-- 2nd slider
-		node._items[13]._slider_color = Color( 255, PeerModListHighlights.settings.Ylistcolour1, PeerModListHighlights.settings.Ylistcolour2, PeerModListHighlights.settings.Ylistcolour3 ) / 255
-		node._items[13]._slider_color_highlight = Color( 255, PeerModListHighlights.settings.Ylistcolour1, PeerModListHighlights.settings.Ylistcolour2, PeerModListHighlights.settings.Ylistcolour3 ) / 255
-		node._items[13]._parameters.disabled_color = Color( 255, PeerModListHighlights.settings.Ylistcolour1, PeerModListHighlights.settings.Ylistcolour2, PeerModListHighlights.settings.Ylistcolour3 ) / 255
-		node._items[13]._show_slider_text = false
-		node._items[13]._enabled = false
+		node._items[18]._slider_color = Color( 255, PeerModListHighlights.settings.Ylistcolour1, PeerModListHighlights.settings.Ylistcolour2, PeerModListHighlights.settings.Ylistcolour3 ) / 255
+		node._items[18]._slider_color_highlight = Color( 255, PeerModListHighlights.settings.Ylistcolour1, PeerModListHighlights.settings.Ylistcolour2, PeerModListHighlights.settings.Ylistcolour3 ) / 255
+		node._items[18]._parameters.disabled_color = Color( 255, PeerModListHighlights.settings.Ylistcolour1, PeerModListHighlights.settings.Ylistcolour2, PeerModListHighlights.settings.Ylistcolour3 ) / 255
+		node._items[18]._show_slider_text = false
+		node._items[18]._enabled = false
 		-- 3rd
-		node._items[19]._slider_color = Color( 255, PeerModListHighlights.settings.Rlistcolour1, PeerModListHighlights.settings.Rlistcolour2, PeerModListHighlights.settings.Rlistcolour3 ) / 255
-		node._items[19]._slider_color_highlight = Color( 255, PeerModListHighlights.settings.Rlistcolour1, PeerModListHighlights.settings.Rlistcolour2, PeerModListHighlights.settings.Rlistcolour3 ) / 255
-		node._items[19]._parameters.disabled_color = Color( 255, PeerModListHighlights.settings.Rlistcolour1, PeerModListHighlights.settings.Rlistcolour2, PeerModListHighlights.settings.Rlistcolour3 ) / 255
-		node._items[19]._show_slider_text = false
-		node._items[19]._enabled = false
+		node._items[24]._slider_color = Color( 255, PeerModListHighlights.settings.Rlistcolour1, PeerModListHighlights.settings.Rlistcolour2, PeerModListHighlights.settings.Rlistcolour3 ) / 255
+		node._items[24]._slider_color_highlight = Color( 255, PeerModListHighlights.settings.Rlistcolour1, PeerModListHighlights.settings.Rlistcolour2, PeerModListHighlights.settings.Rlistcolour3 ) / 255
+		node._items[24]._parameters.disabled_color = Color( 255, PeerModListHighlights.settings.Rlistcolour1, PeerModListHighlights.settings.Rlistcolour2, PeerModListHighlights.settings.Rlistcolour3 ) / 255
+		node._items[24]._show_slider_text = false
+		node._items[24]._enabled = false
 		end
 		PeerModListHighlights:resetslidercolours()
 		-- refresh gui when we enter this menu
