@@ -15,9 +15,11 @@ Hooks:Add('LocalizationManagerPostInit', 'PMLH_local', function(loc)
     end
 
 	if lang == "ru" then
-		loc:load_localization_file(PeerModListHighlights.modpath .. 'menus/lang/PMLHmenu_ru.txt', false)
+		loc:load_localization_file(PeerModListHighlights.modpath .. 'menus/lang/PMLHmenu_ru.json', false)
+	elseif lang == "chs" then
+		loc:load_localization_file(PeerModListHighlights.modpath .. 'menus/lang/PMLHmenu_chs.json', false)
 	else
-		loc:load_localization_file(PeerModListHighlights.modpath .. 'menus/lang/PMLHmenu_en.txt', false)
+		loc:load_localization_file(PeerModListHighlights.modpath .. 'menus/lang/PMLHmenu_en.json', false)
 	end
 end)
 
