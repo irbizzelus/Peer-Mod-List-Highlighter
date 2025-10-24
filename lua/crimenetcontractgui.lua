@@ -907,323 +907,321 @@ function CrimeNetContractGui:init_PMLH(ws, fullscreen_ws, node)
 		add_line("menu_toggle_drop_in", drop_in[server_data.drop_in])
 	end
 
-	if job_data.mods then
-		local mods_presence = job_data.mods
+	local mods_presence = job_data.mods
 
-		if mods_presence and mods_presence ~= "" and mods_presence ~= "1" then
-			local content_panel = add_tab("menu_cn_game_mods")
-			self._mods_tab = self._tabs[#self._tabs]
-			self._mods_scroll = ScrollablePanel:new(content_panel, "mods_scroll", {
-				padding = 0
-			})
-			self._mod_items = {}
-			local _y = 7
-			local add_back = true
+	if mods_presence and mods_presence ~= "" and mods_presence ~= "1" and (not managers.network.matchmake.no_mod_string or mods_presence ~= managers.network.matchmake:no_mod_string()) then
+		local content_panel = add_tab("menu_cn_game_mods")
+		self._mods_tab = self._tabs[#self._tabs]
+		self._mods_scroll = ScrollablePanel:new(content_panel, "mods_scroll", {
+			padding = 0
+		})
+		self._mod_items = {}
+		local _y = 7
+		local add_back = true
 
-			--##########################################--Mod changes start here--############################################--
-			--################################################################################################################--
-			--################################################################################################################--
-			--################################################################################################################--
-			--################################################################################################################--
-			--################################################################################################################--
-			
-			-- add a base mod text line with non-highlighted mods
-			local function add_line(id, text, ignore_back)
-				local canvas = self._mods_scroll:canvas()
+		--##########################################--Mod changes start here--############################################--
+		--################################################################################################################--
+		--################################################################################################################--
+		--################################################################################################################--
+		--################################################################################################################--
+		--################################################################################################################--
+		
+		-- add a base mod text line with non-highlighted mods
+		local function add_line(id, text, ignore_back)
+			local canvas = self._mods_scroll:canvas()
 
-				if add_back and not ignore_back then
-					canvas:rect({
-						x = 8,
-						layer = -1,
-						y = _y,
-						h = tweak_data.menu.pd2_small_font_size,
-						w = canvas:w() - 18,
-						color = Color.black:with_alpha(0.7)
-					})
-				end
-
-				add_back = not add_back
-				text = string.upper(text)
-				
-				local left_text = nil
-				local highlight_text = nil
-				local mod_name = text
-				if PeerModListHighlights.settings.include_mod_folder_crimenet then
-					mod_name = mod_name.." ("..id..")"
-				end
-				if PeerModListHighlights:isModInGreen(text) or PeerModListHighlights:isModInYellow(text) or PeerModListHighlights:isModInRed(text) then
-					-- nothing	
-				else
-					left_text = canvas:text({
-						align = "left",
-						name = id,
-						font = tweak_data.menu.pd2_small_font,
-						font_size = tweak_data.menu.pd2_small_font_size,
-						text = text,
-						x = padding,
-						y = _y,
-						h = tweak_data.menu.pd2_small_font_size,
-						w = canvas:w() - double_padding,
-						color = PeerModListHighlights.settings.crimenetDefaultColour
-					})
-					highlight_text = canvas:text({
-						blend_mode = "add",
-						align = "left",
-						visible = false,
-						name = id,
-						font = tweak_data.menu.pd2_small_font,
-						font_size = tweak_data.menu.pd2_small_font_size,
-						text = mod_name,
-						x = padding,
-						y = _y,
-						h = tweak_data.menu.pd2_small_font_size,
-						w = canvas:w() - double_padding,
-						color = tweak_data.screen_colors.button_stage_2
-					})
-					_y = left_text:bottom() + 2
-				end
-
-				return left_text, highlight_text
-			end
-			
-			-- add green highlighted mod text line
-			local function add_line_highlighted_green(id, text, ignore_back)
-				local canvas = self._mods_scroll:canvas()
-
-				if add_back and not ignore_back then
-					canvas:rect({
-						x = 8,
-						layer = -1,
-						y = _y,
-						h = tweak_data.menu.pd2_small_font_size,
-						w = canvas:w() - 18,
-						color = Color.black:with_alpha(0.7)
-					})
-				end
-
-				add_back = not add_back
-				text = string.upper(text)
-
-				local left_text = nil
-				local highlight_text = nil
-				local mod_name = text
-				if PeerModListHighlights.settings.include_mod_folder_crimenet then
-					mod_name = mod_name.." ("..id..")"
-				end
-				if PeerModListHighlights:isModInGreen(text) then
-					left_text = canvas:text({
-						align = "left",
-						name = id,
-						font = tweak_data.menu.pd2_small_font,
-						font_size = tweak_data.menu.pd2_small_font_size,
-						text = text,
-						x = padding,
-						y = _y,
-						h = tweak_data.menu.pd2_small_font_size,
-						w = canvas:w() - double_padding,
-						color = PeerModListHighlights.greencolour
-					})
-					highlight_text = canvas:text({
-						blend_mode = "add",
-						align = "left",
-						visible = false,
-						name = id,
-						font = tweak_data.menu.pd2_small_font,
-						font_size = tweak_data.menu.pd2_small_font_size,
-						text = mod_name,
-						x = padding,
-						y = _y,
-						h = tweak_data.menu.pd2_small_font_size,
-						w = canvas:w() - double_padding,
-						color = tweak_data.screen_colors.button_stage_2
-					})
-					_y = left_text:bottom() + 2
-				else
-					-- nothing
-				end
-
-				return left_text, highlight_text
-			end
-			
-			-- add yellow highlighted mod text line
-			local function add_line_highlighted_yellow(id, text, ignore_back)
-				local canvas = self._mods_scroll:canvas()
-
-				if add_back and not ignore_back then
-					canvas:rect({
-						x = 8,
-						layer = -1,
-						y = _y,
-						h = tweak_data.menu.pd2_small_font_size,
-						w = canvas:w() - 18,
-						color = Color.black:with_alpha(0.7)
-					})
-				end
-
-				add_back = not add_back
-				text = string.upper(text)
-
-				local left_text = nil
-				local highlight_text = nil
-				local mod_name = text
-				if PeerModListHighlights.settings.include_mod_folder_crimenet then
-					mod_name = mod_name.." ("..id..")"
-				end
-				if PeerModListHighlights:isModInYellow(text) then
-					left_text = canvas:text({
-						align = "left",
-						name = id,
-						font = tweak_data.menu.pd2_small_font,
-						font_size = tweak_data.menu.pd2_small_font_size,
-						text = text,
-						x = padding,
-						y = _y,
-						h = tweak_data.menu.pd2_small_font_size,
-						w = canvas:w() - double_padding,
-						color = PeerModListHighlights.yellowcolour
-					})
-					highlight_text = canvas:text({
-						blend_mode = "add",
-						align = "left",
-						visible = false,
-						name = id,
-						font = tweak_data.menu.pd2_small_font,
-						font_size = tweak_data.menu.pd2_small_font_size,
-						text = mod_name,
-						x = padding,
-						y = _y,
-						h = tweak_data.menu.pd2_small_font_size,
-						w = canvas:w() - double_padding,
-						color = tweak_data.screen_colors.button_stage_2
-					})
-					_y = left_text:bottom() + 2
-				else
-					-- nothing
-				end
-				return left_text, highlight_text
-			end
-			
-			-- add red highlighted mod text line
-			local function add_line_highlighted_red(id, text, ignore_back)
-				local canvas = self._mods_scroll:canvas()
-
-				if add_back and not ignore_back then
-					canvas:rect({
-						x = 8,
-						layer = -1,
-						y = _y,
-						h = tweak_data.menu.pd2_small_font_size,
-						w = canvas:w() - 18,
-						color = Color.black:with_alpha(0.7)
-					})
-				end
-
-				add_back = not add_back
-				text = string.upper(text)
-				
-				local left_text = nil
-				local highlight_text = nil
-				local mod_name = text
-				if PeerModListHighlights.settings.include_mod_folder_crimenet then
-					mod_name = mod_name.." ("..id..")"
-				end
-				if PeerModListHighlights:isModInRed(text) then
-					left_text = canvas:text({
-						align = "left",
-						name = id,
-						font = tweak_data.menu.pd2_small_font,
-						font_size = tweak_data.menu.pd2_small_font_size,
-						text = text,
-						x = padding,
-						y = _y,
-						h = tweak_data.menu.pd2_small_font_size,
-						w = canvas:w() - double_padding,
-						color = PeerModListHighlights.redcolour
-					})
-					highlight_text = canvas:text({
-						blend_mode = "add",
-						align = "left",
-						visible = false,
-						name = id,
-						font = tweak_data.menu.pd2_small_font,
-						font_size = tweak_data.menu.pd2_small_font_size,
-						text = mod_name,
-						x = padding,
-						y = _y,
-						h = tweak_data.menu.pd2_small_font_size,
-						w = canvas:w() - double_padding,
-						color = tweak_data.screen_colors.button_stage_2
-					})
-					_y = left_text:bottom() + 2
-				else
-					-- nothing
-				end
-				
-				return left_text, highlight_text
-			end
-					
-			local splits = string.split(mods_presence, "|")
-
-			-- go through our splited string containing mod names, checking against greens, then yellows, then reds in that order, to put them on top, then adding the rest
-			-- im probably dumb, and there's a more optimal way of doing this sorting shit, but who cares, running through the same string split 4 times may only be harmful if its like 50k charachters long 
-			for i = 1, #splits, 2 do
-				local text, highlight = add_line_highlighted_green(splits[i + 1] or "", splits[i] or "")
-				if text == nil or highlight == nil then
-					-- nope
-				else
-					table.insert(self._mod_items, {
-						text,
-						highlight
-					})
-				end		
-			end
-			
-			for i = 1, #splits, 2 do
-				local text, highlight = add_line_highlighted_yellow(splits[i + 1] or "", splits[i] or "")
-				if text == nil or highlight == nil then
-					-- nope
-				else
-					table.insert(self._mod_items, {
-						text,
-						highlight
-					})
-				end		
-			end
-			
-			for i = 1, #splits, 2 do
-				local text, highlight = add_line_highlighted_red(splits[i + 1] or "", splits[i] or "")
-				if text == nil or highlight == nil then
-					-- nope
-				else
-					table.insert(self._mod_items, {
-						text,
-						highlight
-					})
-				end		
-			end
-			
-			for i = 1, #splits, 2 do
-				local text, highlight = add_line(splits[i + 1] or "", splits[i] or "")
-				if text == nil or highlight == nil then
-					-- nope
-				else
-					table.insert(self._mod_items, {
-						text,
-						highlight
-					})
-				end	
+			if add_back and not ignore_back then
+				canvas:rect({
+					x = 8,
+					layer = -1,
+					y = _y,
+					h = tweak_data.menu.pd2_small_font_size,
+					w = canvas:w() - 18,
+					color = Color.black:with_alpha(0.7)
+				})
 			end
 
-			--##############--Mod changes for this function end here, some other mod stuff is below --############--
-			--####################################################################################################--
-			--####################################################################################################--
-			--####################################################################################################--
-			--####################################################################################################--
-			--####################################################################################################--
+			add_back = not add_back
+			text = string.upper(text)
 			
-			add_line("spacer", "", true)
-			self._mods_scroll:update_canvas_size()
+			local left_text = nil
+			local highlight_text = nil
+			local mod_name = text
+			if PeerModListHighlights.settings.include_mod_folder_crimenet then
+				mod_name = mod_name.." ("..id..")"
+			end
+			if PeerModListHighlights:isModInGreen(text) or PeerModListHighlights:isModInYellow(text) or PeerModListHighlights:isModInRed(text) then
+				-- nothing	
+			else
+				left_text = canvas:text({
+					align = "left",
+					name = id,
+					font = tweak_data.menu.pd2_small_font,
+					font_size = tweak_data.menu.pd2_small_font_size,
+					text = text,
+					x = padding,
+					y = _y,
+					h = tweak_data.menu.pd2_small_font_size,
+					w = canvas:w() - double_padding,
+					color = PeerModListHighlights.settings.crimenetDefaultColour
+				})
+				highlight_text = canvas:text({
+					blend_mode = "add",
+					align = "left",
+					visible = false,
+					name = id,
+					font = tweak_data.menu.pd2_small_font,
+					font_size = tweak_data.menu.pd2_small_font_size,
+					text = mod_name,
+					x = padding,
+					y = _y,
+					h = tweak_data.menu.pd2_small_font_size,
+					w = canvas:w() - double_padding,
+					color = tweak_data.screen_colors.button_stage_2
+				})
+				_y = left_text:bottom() + 2
+			end
+
+			return left_text, highlight_text
 		end
+		
+		-- add green highlighted mod text line
+		local function add_line_highlighted_green(id, text, ignore_back)
+			local canvas = self._mods_scroll:canvas()
+
+			if add_back and not ignore_back then
+				canvas:rect({
+					x = 8,
+					layer = -1,
+					y = _y,
+					h = tweak_data.menu.pd2_small_font_size,
+					w = canvas:w() - 18,
+					color = Color.black:with_alpha(0.7)
+				})
+			end
+
+			add_back = not add_back
+			text = string.upper(text)
+
+			local left_text = nil
+			local highlight_text = nil
+			local mod_name = text
+			if PeerModListHighlights.settings.include_mod_folder_crimenet then
+				mod_name = mod_name.." ("..id..")"
+			end
+			if PeerModListHighlights:isModInGreen(text) then
+				left_text = canvas:text({
+					align = "left",
+					name = id,
+					font = tweak_data.menu.pd2_small_font,
+					font_size = tweak_data.menu.pd2_small_font_size,
+					text = text,
+					x = padding,
+					y = _y,
+					h = tweak_data.menu.pd2_small_font_size,
+					w = canvas:w() - double_padding,
+					color = PeerModListHighlights.greencolour
+				})
+				highlight_text = canvas:text({
+					blend_mode = "add",
+					align = "left",
+					visible = false,
+					name = id,
+					font = tweak_data.menu.pd2_small_font,
+					font_size = tweak_data.menu.pd2_small_font_size,
+					text = mod_name,
+					x = padding,
+					y = _y,
+					h = tweak_data.menu.pd2_small_font_size,
+					w = canvas:w() - double_padding,
+					color = tweak_data.screen_colors.button_stage_2
+				})
+				_y = left_text:bottom() + 2
+			else
+				-- nothing
+			end
+
+			return left_text, highlight_text
+		end
+		
+		-- add yellow highlighted mod text line
+		local function add_line_highlighted_yellow(id, text, ignore_back)
+			local canvas = self._mods_scroll:canvas()
+
+			if add_back and not ignore_back then
+				canvas:rect({
+					x = 8,
+					layer = -1,
+					y = _y,
+					h = tweak_data.menu.pd2_small_font_size,
+					w = canvas:w() - 18,
+					color = Color.black:with_alpha(0.7)
+				})
+			end
+
+			add_back = not add_back
+			text = string.upper(text)
+
+			local left_text = nil
+			local highlight_text = nil
+			local mod_name = text
+			if PeerModListHighlights.settings.include_mod_folder_crimenet then
+				mod_name = mod_name.." ("..id..")"
+			end
+			if PeerModListHighlights:isModInYellow(text) then
+				left_text = canvas:text({
+					align = "left",
+					name = id,
+					font = tweak_data.menu.pd2_small_font,
+					font_size = tweak_data.menu.pd2_small_font_size,
+					text = text,
+					x = padding,
+					y = _y,
+					h = tweak_data.menu.pd2_small_font_size,
+					w = canvas:w() - double_padding,
+					color = PeerModListHighlights.yellowcolour
+				})
+				highlight_text = canvas:text({
+					blend_mode = "add",
+					align = "left",
+					visible = false,
+					name = id,
+					font = tweak_data.menu.pd2_small_font,
+					font_size = tweak_data.menu.pd2_small_font_size,
+					text = mod_name,
+					x = padding,
+					y = _y,
+					h = tweak_data.menu.pd2_small_font_size,
+					w = canvas:w() - double_padding,
+					color = tweak_data.screen_colors.button_stage_2
+				})
+				_y = left_text:bottom() + 2
+			else
+				-- nothing
+			end
+			return left_text, highlight_text
+		end
+		
+		-- add red highlighted mod text line
+		local function add_line_highlighted_red(id, text, ignore_back)
+			local canvas = self._mods_scroll:canvas()
+
+			if add_back and not ignore_back then
+				canvas:rect({
+					x = 8,
+					layer = -1,
+					y = _y,
+					h = tweak_data.menu.pd2_small_font_size,
+					w = canvas:w() - 18,
+					color = Color.black:with_alpha(0.7)
+				})
+			end
+
+			add_back = not add_back
+			text = string.upper(text)
+			
+			local left_text = nil
+			local highlight_text = nil
+			local mod_name = text
+			if PeerModListHighlights.settings.include_mod_folder_crimenet then
+				mod_name = mod_name.." ("..id..")"
+			end
+			if PeerModListHighlights:isModInRed(text) then
+				left_text = canvas:text({
+					align = "left",
+					name = id,
+					font = tweak_data.menu.pd2_small_font,
+					font_size = tweak_data.menu.pd2_small_font_size,
+					text = text,
+					x = padding,
+					y = _y,
+					h = tweak_data.menu.pd2_small_font_size,
+					w = canvas:w() - double_padding,
+					color = PeerModListHighlights.redcolour
+				})
+				highlight_text = canvas:text({
+					blend_mode = "add",
+					align = "left",
+					visible = false,
+					name = id,
+					font = tweak_data.menu.pd2_small_font,
+					font_size = tweak_data.menu.pd2_small_font_size,
+					text = mod_name,
+					x = padding,
+					y = _y,
+					h = tweak_data.menu.pd2_small_font_size,
+					w = canvas:w() - double_padding,
+					color = tweak_data.screen_colors.button_stage_2
+				})
+				_y = left_text:bottom() + 2
+			else
+				-- nothing
+			end
+			
+			return left_text, highlight_text
+		end
+				
+		local splits = string.split(mods_presence, "|")
+
+		-- go through our splited string containing mod names, checking against greens, then yellows, then reds in that order, to put them on top, then adding the rest
+		-- im probably dumb, and there's a more optimal way of doing this sorting shit, but who cares, running through the same string split 4 times may only be harmful if its like 50k charachters long 
+		for i = 1, #splits, 2 do
+			local text, highlight = add_line_highlighted_green(splits[i + 1] or "", splits[i] or "")
+			if text == nil or highlight == nil then
+				-- nope
+			else
+				table.insert(self._mod_items, {
+					text,
+					highlight
+				})
+			end		
+		end
+		
+		for i = 1, #splits, 2 do
+			local text, highlight = add_line_highlighted_yellow(splits[i + 1] or "", splits[i] or "")
+			if text == nil or highlight == nil then
+				-- nope
+			else
+				table.insert(self._mod_items, {
+					text,
+					highlight
+				})
+			end		
+		end
+		
+		for i = 1, #splits, 2 do
+			local text, highlight = add_line_highlighted_red(splits[i + 1] or "", splits[i] or "")
+			if text == nil or highlight == nil then
+				-- nope
+			else
+				table.insert(self._mod_items, {
+					text,
+					highlight
+				})
+			end		
+		end
+		
+		for i = 1, #splits, 2 do
+			local text, highlight = add_line(splits[i + 1] or "", splits[i] or "")
+			if text == nil or highlight == nil then
+				-- nope
+			else
+				table.insert(self._mod_items, {
+					text,
+					highlight
+				})
+			end	
+		end
+
+		--##############--Mod changes for this function end here, some other mod stuff is below --############--
+		--####################################################################################################--
+		--####################################################################################################--
+		--####################################################################################################--
+		--####################################################################################################--
+		--####################################################################################################--
+		
+		add_line("spacer", "", true)
+		self._mods_scroll:update_canvas_size()
 	end
 
 	local days_multiplier = 0
