@@ -202,6 +202,7 @@ function InspectPlayerInitiator:modify_node_PMLH(node, inspect_peer)
 					localize = false,
 					name = "mod_" .. tostring(i),
 					text_id = mod_name,
+					PMLH_name_identifier = mod.name,
 					mod_id = mod.id,
 					color_ranges = {{ -- this part adds colours starting at 0 and ending at modname's last letter. This method seems to be only used by a function that adds purple colour to player's infamy level
 						start = 0,
@@ -226,6 +227,7 @@ function InspectPlayerInitiator:modify_node_PMLH(node, inspect_peer)
 					localize = false,
 					name = "mod_" .. tostring(i),
 					text_id = mod_name,
+					PMLH_name_identifier = mod.name,
 					mod_id = mod.id,
 					color_ranges = {{
 						start = 0,
@@ -250,6 +252,7 @@ function InspectPlayerInitiator:modify_node_PMLH(node, inspect_peer)
 					localize = false,
 					name = "mod_" .. tostring(i),
 					text_id = mod_name,
+					PMLH_name_identifier = mod.name,
 					mod_id = mod.id,
 					color_ranges = {{
 						start = 0,
@@ -275,6 +278,7 @@ function InspectPlayerInitiator:modify_node_PMLH(node, inspect_peer)
 						localize = false,
 						name = "mod_" .. tostring(i),
 						text_id = mod_name,
+						PMLH_name_identifier = mod.name,
 						mod_id = mod.id,
 						color_ranges = {{
 							start = 0,
@@ -288,6 +292,7 @@ function InspectPlayerInitiator:modify_node_PMLH(node, inspect_peer)
 						localize = false,
 						name = "mod_" .. tostring(i),
 						text_id = mod_name,
+						PMLH_name_identifier = mod.name,
 						mod_id = mod.id,
 						}
 				end
@@ -320,7 +325,7 @@ end
 function MenuCallbackHandler:PMLH_new_inspect_mod(item)
 	local menu_options = {}
 	local_pmlh_mod_id = item:parameters().mod_id
-	local_pmlh_mod_name = item:parameters().text_id
+	local_pmlh_mod_name = item:parameters().PMLH_name_identifier or item:parameters().text_id
 	menu_options[#menu_options+1] ={text = managers.localization:text("PMLH_searchmodname"), data = nil, callback = PeerModListHighlights.checkmod}
 	menu_options[#menu_options+1] ={text = managers.localization:text("PMLH_searchmodfolder"), data = nil, callback = PeerModListHighlights.checkmodbyid}
 	menu_options[#menu_options+1] ={text = "", is_cancel_button = false}
