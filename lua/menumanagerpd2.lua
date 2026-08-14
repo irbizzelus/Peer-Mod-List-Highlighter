@@ -63,7 +63,7 @@ function InspectPlayerInitiator:modify_node_PMLH(node, inspect_peer)
 		end
 
 		local function get_identifier(peer)
-			return SystemInfo:platform() == Idstring("WIN32") and peer:account_id() or peer:name()
+			return IS_PC and peer:account_id() or peer:name()
 		end
 
 		local params = {
@@ -171,7 +171,7 @@ function InspectPlayerInitiator:modify_node_PMLH(node, inspect_peer)
 
 	self:create_divider(node, "admin_spacer")
 
-	local user = SystemInfo:distribution() == Idstring("STEAM") and Steam:user(inspect_peer:ip())
+	local user = IS_STEAM and Steam:user(inspect_peer:ip())
 
 	if user and user:rich_presence("is_modded") == "1" or inspect_peer:is_modded() then
 		local params = {
